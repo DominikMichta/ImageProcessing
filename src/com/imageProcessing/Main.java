@@ -25,7 +25,8 @@ public class Main {
     };
 
     public static void main(String[] args) throws IOException {
-        Network network = Network.load("Network_FromTrainer_test");
+        Network network = Network.load("NetworkFile");
+        doTheMagic(network, 10000, 0.3);
         NetworkTools.saveAsImage(network, 1);
 
     }
@@ -36,12 +37,12 @@ public class Main {
                 network.train(inputs[j], targets[j], eta);
             System.out.println((int)(((double)i+1)/((double)trainingIterations)*100)+"% finished");
         }
-        network.save("Network1");
+        network.save("NetworkFile");
     }
 
 
     private static void loadInputsAndOutputs() throws IOException {
-        File inputsFile = new File("C:\\Users\\micht\\Desktop\\inputs.csv");
+        File inputsFile = new File("inputs.csv");
         FileReader fr = new FileReader(inputsFile);
         BufferedReader br = new BufferedReader(fr);
         for(int i = 0; i< NUMBER_OF_INPUTS; i++){
@@ -55,7 +56,7 @@ public class Main {
         br.close();
         fr.close();
 
-        File targetsFile = new File("C:\\Users\\micht\\Desktop\\targets.csv");
+        File targetsFile = new File("targets.csv");
         fr = new FileReader(targetsFile);
         br = new BufferedReader(fr);
         for(int i = 0; i< NUMBER_OF_INPUTS; i++){
@@ -70,33 +71,18 @@ public class Main {
         fr.close();
     }
 
-    private static void renameFiles(){
-        for(int i=1; i<=41; i++){
-            File folder = new File("C:\\Users\\micht\\Desktop\\training data\\"+String.valueOf(i));
-            if(folder.isDirectory())
-                System.out.println(folder.getName());
-            File[] files = folder.listFiles();
-            for(int j=0; j<files.length; j++){
-                if(files[j].isFile()) {
-                    File file = new File("C:\\Users\\micht\\Desktop\\training data\\" + String.valueOf(i) + "\\" + files[j].getName());
-                    file.renameTo(new File("C:\\Users\\micht\\Desktop\\training data\\" + String.valueOf(i) + "\\" + String.valueOf(j)+".jpg"));
-                }
-            }
-        }
-        System.out.println("Renaming done!");
-    }
 
     private static void createMatchups() throws IOException {
         System.out.println("Generating values...");
-        File inputs = new File("C:\\Users\\micht\\Desktop\\inputs_v2.csv");
-        File targets = new File("C:\\Users\\micht\\Desktop\\targets.csv");
+        File inputs = new File("inputs.csv");
+        File targets = new File("targets.csv");
         FileWriter fw1 = new FileWriter(inputs);
         BufferedWriter inputsWriter = new BufferedWriter(fw1);
         FileWriter fw2 = new FileWriter(targets);
         BufferedWriter targetsWriter = new BufferedWriter(fw2);
 
         for(int i=1; i<=41; i++){
-            File dir = new File("C:\\Users\\micht\\Desktop\\training data\\"+String.valueOf(i));
+            File dir = new File("training pictures\\"+String.valueOf(i));
             File[] files = dir.listFiles();
             for(int j=0; j<files.length; j++){
                 if(files[j].isFile()) {
@@ -105,7 +91,7 @@ public class Main {
                     Imgproc.cvtColor(image1, image1, Imgproc.COLOR_BGR2GRAY);
                     Imgproc.GaussianBlur(image1, image1, new Size(5, 5), 0);
                     for(int folder=1; folder<=41; folder++){
-                        File innerFolder = new File("C:\\Users\\micht\\Desktop\\training data\\"+String.valueOf(folder));
+                        File innerFolder = new File("training pictures\\"+String.valueOf(folder));
                         File[] innerFiles = innerFolder.listFiles();
                         for(int file=0; file<innerFiles.length; file++){
                              //&& !(inf==i && inFi==j) add this condition if don't need the same images
@@ -136,50 +122,6 @@ public class Main {
                         }
                     }
                 }
-            }
-            System.out.println(i);
-        }
-        inputsWriter.close();
-        fw1.close();
-        targetsWriter.close();
-        fw2.close();
-    }
-
-
-    private static void onlyTheSame() throws IOException {
-        //Mat[] images = loadImages();
-        System.out.println("Generating values...");
-        File inputs = new File("C:\\Users\\micht\\Desktop\\input_small.csv");
-        File targets = new File("C:\\Users\\micht\\Desktop\\target_small.csv");
-        FileWriter fw1 = new FileWriter(inputs);
-        BufferedWriter inputsWriter = new BufferedWriter(fw1);
-        FileWriter fw2 = new FileWriter(targets);
-        BufferedWriter targetsWriter = new BufferedWriter(fw2);
-        int index=0;
-        for(int i=1; i<41; i++){
-            Mat image1 = Processing.getImage(String.valueOf(0), String.valueOf(i));
-            Imgproc.cvtColor(image1, image1, Imgproc.COLOR_BGR2GRAY);
-            Imgproc.GaussianBlur(image1, image1, new Size(5, 5), 0);
-            for(int folder=i+1; folder<=41; folder++){
-                Mat image2 = Processing.getImage(String.valueOf(0), String.valueOf(folder));
-                Imgproc.cvtColor(image2, image2, Imgproc.COLOR_BGR2GRAY);
-                Imgproc.GaussianBlur(image2, image2, new Size(5, 5), 0);
-
-                float[] values = DataGenerator.generate(image1, image2);
-
-                for(int v=0; v<values.length; v++){
-                    inputsWriter.write(String.valueOf(values[v]));
-                    if(v!=values.length-1)
-                        inputsWriter.write(";");
-                }
-                inputsWriter.newLine();
-
-
-                targetsWriter.write("0;1");
-                targetsWriter.newLine();
-
-                System.gc();
-
             }
             System.out.println(i);
         }

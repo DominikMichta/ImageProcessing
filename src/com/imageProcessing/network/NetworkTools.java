@@ -84,7 +84,7 @@ public class NetworkTools {
             }
         }
 
-        Imgcodecs.imwrite("C:\\Users\\micht\\Desktop\\com.imageProcessing.network.bmp", image);
+        Imgcodecs.imwrite("network.bmp", image);
 
     }
 }

@@ -47,13 +47,6 @@ public class DataGenerator {
         return smallImages[imageIndex];
     }
 
-    private static void drawRectangle(Mat image, int index, String filename){
-        Imgproc.rectangle(image, new Point((image.rows()/8)*(index%8),(image.rows()/8)*(index/8)),
-                new Point(((image.rows()/8)*(index%8))+(image.rows()/8),(image.rows()/8)*(index/8)+(image.rows()/8)),
-                new Scalar(255, 255, 255));
-        Processing.saveImage(image, filename, "polling");
-    }
-
     private static float[] getData(Mat image){
 
         Mat histogram = new Mat();

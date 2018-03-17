@@ -17,15 +17,12 @@ import java.util.concurrent.CountDownLatch;
 public class Processing {
 
     public static Mat loadImage(String filename, String folder){
-        //
-        // File input = new File("C:\\Users\\micht\\IdeaProjects\\OpenCv\\src\\pictures\\"+folder+"\\" + filename+".jpg");
-        File input = new File("C:\\Users\\micht\\Desktop\\training data\\"+folder+"\\" + filename+".jpg");
-        //File input = new File("C:\\Users\\micht\\Desktop\\training data" + filename+".jpg");
+        File input = new File(folder+"\\" + filename+".jpg");
         BufferedImage image = null;
         try {
             image = ImageIO.read(input);
         } catch (IOException e) {
-            input = new File("C:\\Users\\micht\\IdeaProjects\\OpenCv\\src\\pictures\\"+folder+"\\" + filename+".jpeg");
+            input = new File(folder+"\\" + filename+".jpeg");
             try {
                 image = ImageIO.read(input);
             } catch (IOException e1) {
@@ -46,8 +43,8 @@ public class Processing {
     }
 
     public static double[] compare(String filename1, String filename2, Network network){
-        Mat image1 = loadImage(filename1, "temp2");
-        Mat image2 = loadImage(filename2, "temp2");
+        Mat image1 = loadImage(filename1, "");
+        Mat image2 = loadImage(filename2, "");
         Imgproc.cvtColor(image1, image1, Imgproc.COLOR_BGR2GRAY);
         Imgproc.GaussianBlur(image1, image1, new Size(5, 5), 0);
         Imgproc.cvtColor(image2, image2, Imgproc.COLOR_BGR2GRAY);
@@ -73,7 +70,7 @@ public class Processing {
 
 
     static void process(String fileName) throws IOException, InterruptedException {
-        Mat image = loadImage(fileName, "temp");
+        Mat image = loadImage(fileName, "");
         Mat originalImage = image.clone();
         Imgproc.pyrDown(image, image);
         Imgproc.pyrDown(image, image);
@@ -135,18 +132,10 @@ public class Processing {
             return;
         }
 
-        /*
-        for (int i = 0; i < 4; ++i)
-        {
-            Core.line(background, points[i], points[(i + 1) % 4], new Scalar(255, 0, 0, 1), 4);
-        }
-        */
-        //Highgui.imwrite("C:\\Users\\micht\\IdeaProjects\\OpenCv\\src\\pictures\\processingOutput\\" + fileName +".jpeg", background);
-
         Mat outputMat = perspectiveTransform(originalImage, rect);
 
 
-        saveImage(outputMat, fileName, "output");
+        saveImage(outputMat, fileName, "");
     }
 
     private static Mat perspectiveTransform(Mat originalImage, RotatedRect rect) {
@@ -224,10 +213,10 @@ public class Processing {
 
     public static void saveImage(Mat image, String filename, String folder){
         if(folder!=null)
-            Imgcodecs.imwrite("C:\\Users\\micht\\IdeaProjects\\OpenCv\\src\\pictures\\"+folder+"\\"+
+            Imgcodecs.imwrite(folder+"\\"+
                     filename+".jpeg", image);
         else
-            Imgcodecs.imwrite("C:\\Users\\micht\\IdeaProjects\\OpenCv\\src\\pictures\\"+filename +".jpeg", image);
+            Imgcodecs.imwrite(filename +".jpeg", image);
     }
 
     private static int findStartId(Point[] points){

@@ -109,7 +109,7 @@ public class Network{
 
 
     public void save(String filename) throws IOException {
-        File networkFile = new File("C:\\Users\\micht\\IdeaProjects\\OpenCv\\src\\pictures\\"+filename+".csv");
+        File networkFile = new File(filename+".csv");
         FileWriter fw = new FileWriter(networkFile);
         BufferedWriter bw = new BufferedWriter(fw);
 
@@ -150,7 +150,7 @@ public class Network{
 
 
     public static Network load(String filename) throws IOException {
-        File networkFile = new File("C:\\Users\\micht\\IdeaProjects\\OpenCv\\src\\pictures\\"+filename+".csv");
+        File networkFile = new File(filename+".csv");
         FileReader fr = new FileReader(networkFile);
         BufferedReader br = new BufferedReader(fr);
 
@@ -163,8 +163,6 @@ public class Network{
         Network ret = new Network(NetworkLayerSizes);
         line = br.readLine();
         String[] sizes = line.split(";");
-        int INPUT_SIZE = Integer.valueOf(sizes[0]);
-        int OUTPUT_SIZE = Integer.valueOf(sizes[1]);
         int NETWORK_SIZE = Integer.valueOf(sizes[2]);
 
 
